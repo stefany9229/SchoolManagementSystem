@@ -37,6 +37,7 @@ public class GestorAcademico implements ServiciosAcademicosI {
         curso.setId(contadorIdCurso);
         contadorIdCurso++;
         this.cursos.add(curso);
+        estudiantesInscritos.put(curso,  new HashSet<>());
 
     }
 
@@ -48,9 +49,6 @@ public class GestorAcademico implements ServiciosAcademicosI {
                 .findFirst()
                 .orElseThrow(() -> new Exception("el curso al que intenta escribir al estudiante no existe"));
 
-        if (!estudiantesInscritos.containsKey(curso)) {
-            estudiantesInscritos.put(curso,  new HashSet<>());
-        }
 
         Set<Estudiante> estudiantes = estudiantesInscritos.get(curso);
         estudiantes.add(estudiante);
@@ -69,7 +67,7 @@ public class GestorAcademico implements ServiciosAcademicosI {
         Estudiante estudiante = this.estudiantes.stream()
                 .filter(estudia ->estudia.getId()==idEstudiante)
                 .findFirst()
-                .orElseThrow(() -> new Exception("el id inresado no corresponde a nungun estudiante"));
+                .orElseThrow(() -> new Exception("el id ingresado no corresponde a ningun estudiante"));
 
 
         Set<Estudiante> estudiantes = estudiantesInscritos.get(curso);
