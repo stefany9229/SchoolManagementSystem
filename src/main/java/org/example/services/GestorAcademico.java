@@ -1,5 +1,7 @@
 package org.example.services;
 
+import org.example.excepciones.EstudianteNoInscritoEnCursoException;
+import org.example.excepciones.EstudianteYaInscritoException;
 import org.example.model.Curso;
 import org.example.model.Estudiante;
 
@@ -49,6 +51,13 @@ public class GestorAcademico implements ServiciosAcademicosI {
                 .findFirst()
                 .orElseThrow(() -> new Exception("el curso al que intenta escribir al estudiante no existe"));
 
+        if(!this.estudiantes.contains(estudiante)){
+            throw new Exception("el estudiante no se ecuentra en sistema");
+        }
+        if(estudiantesInscritos.get(curso).contains(estudiante)){
+            throw new EstudianteYaInscritoException();
+        }
+
 
         Set<Estudiante> estudiantes = estudiantesInscritos.get(curso);
         estudiantes.add(estudiante);
@@ -63,7 +72,7 @@ public class GestorAcademico implements ServiciosAcademicosI {
         Curso curso = this.cursos.stream()
                 .filter(curso_ -> curso_.getId() == idCurso)
                 .findFirst()
-                .orElseThrow(() -> new Exception("el curso al que intenta insscribir al estudiante no existe"));
+                .orElseThrow(() -> new EstudianteNoInscritoEnCursoException("el curso al que intenta insscribir al estudiante no existe"));
         Estudiante estudiante = this.estudiantes.stream()
                 .filter(estudia ->estudia.getId()==idEstudiante)
                 .findFirst()
